@@ -101,36 +101,54 @@ func InitSettings() Settings {
 
 func ChooseEndpoint(settings Settings) string {
 	if len(settings.Endpoints) == 0 {
-		return ""
-	}
-	reader := bufio.NewReader(os.Stdin)
+		fmt.Println("What endpoint do you want to use?")
 
-	for i := 0; i < len(settings.Endpoints); i++ {
-		fmt.Println(fmt.Sprintf("%d: ", i+1) + settings.Endpoints[i])
-	}
+		reader := bufio.NewReader(os.Stdin)
+		choosen := false
+		for {
+			if choosen {
+				break
+			}
 
-	fmt.Println("What endpoint do you want to use?")
-	choosen := 0
+			fmt.Print("-->")
 
-	for {
-		if choosen > 0 {
-			break
+			text, _ := reader.ReadString('\n')
+			text = strings.Replace(text, "\n", "", -1)
+			return text
+		}
+	} else if len(settings.Endpoints) == 1 {
+		return settings.Endpoints[0]
+	} else {
+		reader := bufio.NewReader(os.Stdin)
+
+		for i := 0; i < len(settings.Endpoints); i++ {
+			fmt.Println(fmt.Sprintf("%d: ", i+1) + settings.Endpoints[i])
 		}
 
-		fmt.Print("-->")
+		fmt.Println("What endpoint do you want to use?")
+		choosen := 0
 
-		text, _ := reader.ReadString('\n')
-		text = strings.Replace(text, "\n", "", -1)
-		intValue, err := strconv.Atoi(text)
+		for {
+			if choosen > 0 {
+				break
+			}
 
-		if err != nil || intValue > len(settings.Endpoints) {
-			choosen = 1
-		} else {
-			choosen = intValue
+			fmt.Print("-->")
+
+			text, _ := reader.ReadString('\n')
+			text = strings.Replace(text, "\n", "", -1)
+			intValue, err := strconv.Atoi(text)
+
+			if err != nil || intValue > len(settings.Endpoints) {
+				choosen = 1
+			} else {
+				choosen = intValue
+			}
 		}
-	}
 
-	return settings.Endpoints[choosen-1]
+		return settings.Endpoints[choosen-1]
+	}
+	return ""
 }
 
 func GrabJson(pathname string) []byte {
