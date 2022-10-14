@@ -1,0 +1,6 @@
+settings.json
+
+test.input/*
+!test-input/.gitkeep
+test-output/*
+!test-output/.gitkeep
