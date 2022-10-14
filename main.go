@@ -184,8 +184,13 @@ func InitUpload(settings Settings) {
 	wg.Add(len(filesToUpload))
 
 	for i := 0; i < len(filesToUpload); i++ {
-		Upload(settings, useEndpoint, filesToUpload[i])
+		go func(i int) {
+			Upload(settings, useEndpoint, filesToUpload[i])
+			wg.Done()
+		}(i)
 	}
+
+	wg.Wait()
 }
 
 func main() {
