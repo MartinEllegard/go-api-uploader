@@ -170,6 +170,7 @@ func Upload(settings Settings, endpoint string, uploadFile UploadData) {
 
 	if err != nil {
 		fmt.Println("Post failed")
+    return 
 	}
 	defer resp.Body.Close()
 
